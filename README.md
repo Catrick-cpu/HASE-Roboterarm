@@ -4,7 +4,7 @@ Offical Repo of Hase Roboterarm
 
 ## Dev
 #### Lockfiles/PID-Files
-sollten in /run/roboarm gesammelt werden (Nimm auf Windows einf %temp% oder so)
+sollten in **/run/roboarm** gesammelt werden (Nimm auf Windows einf %temp% oder so)
 PID-Dateien sind programmname.pid, und das einzige was drinnsteht ist die **P**rocess **ID** des Programms.
 Das erleichtert das Verwalten von laufenden Prozessen und ermöglicht die Verhinderung von Duplikaten
 z. B.:
