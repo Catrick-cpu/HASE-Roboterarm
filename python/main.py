@@ -1,5 +1,4 @@
 # ----import libarys----
-
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 import board
@@ -55,7 +54,12 @@ time.sleep(1)
 
 # ----Motor Defenitions----
 print("Motor Defenitons")
-motors = [kit1.stepper1, kit1.stepper2]
+
+if input == "y":
+    motors = [kit1.stepper1, kit1.stepper2, kit2.stepper1, kit2.stepper2]
+
+else:
+    motors = [kit1.stepper1, kit1.stepper2]
 time.sleep(0.5)
 
 
