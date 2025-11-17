@@ -9,19 +9,22 @@ import os
 import sys
 import argparse  # for getting arguments
 
+# ---- Lockfile zur Verhinderung mehrfacher Ausführung ----
+lockfile = "/tmp/my_script_running.lock"
+if os.path.exists(lockfile):
+    print("Script läuft bereits! Beende Ausführung…")
+    sys.exit(0)
+else:
+    with open(lockfile, "w") as f:
+        f.write(str(os.getpid()))  # PID speichern
+
 
 parser = argparse.ArgumentParser()  # setting up arguments
-parser.add_argument(
-    "testing"
-)  # Verwende einfach immer 0  ------> 1 = nur schauen ob script funktioniert
+
 parser.add_argument("mode")
 # Server für server und manual für manuelle
 args = parser.parse_args()
 
-if int(args.testing) == 1:
-    print("Python is installed this script should work")
-
-    sys.exit(0)
 
 if args.mode in ("server", "manual"):
     mode = args.mode
