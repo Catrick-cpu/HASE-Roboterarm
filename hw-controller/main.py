@@ -1,3 +1,6 @@
+#! /usr/bin/python3
+
+
 # ----import libarys----
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
