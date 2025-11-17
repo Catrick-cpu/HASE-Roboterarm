@@ -1,3 +1,7 @@
+#!!!!!!!!!!!!!!!!!!!!!!!!!
+# THIS SCRIPT IS OUTDATED
+#!!!!!!!!!!!!!!!!!!!!!!!!!
+#
 # ----import libarys----
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
