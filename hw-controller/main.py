@@ -22,8 +22,6 @@ else:
         f.write(str(os.getpid()))  # PID speichern
 
 
-parser = argparse.ArgumentParser()  # setting up arguments
-
 parser.add_argument("mode")
 # Server für server und manual für manuelle
 args = parser.parse_args()
