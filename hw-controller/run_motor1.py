@@ -29,3 +29,10 @@ def main() -> None:
 
 while True:
     main()
+
+    # I2C initialisieren
+    i2c = busio.I2C(board.SCL, board.SDA)
+
+    # Adafruit Motor HAT Standardadresse 0x60
+    kit = MotorKit(i2c=i2c, address=0x60)
+    motor = kit.stepper1
