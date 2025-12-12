@@ -122,8 +122,8 @@ def main():
     }
     dir_map = {"forward": stepper.FORWARD, "backward": stepper.BACKWARD}
 
-    sstyle = sstyle_map[args.stepstil]
-    m_direction: str = dir_map[args.richtung]
+    sstyle = sstyle_map[args.stepstyle]
+    m_direction: str = dir_map[args.direction]
     idx = args.motorid - 1
 
     motor = None
