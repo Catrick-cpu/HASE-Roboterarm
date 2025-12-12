@@ -14,6 +14,17 @@ import argparse
 import time
 import sys
 
+
+# Minimale `stepper`-Konstanten global definieren, damit sie immer verfügbar sind.
+# Bei vorhandenem Hardware-Modul können diese überschrieben oder angepasst werden.
+class stepper:
+    SINGLE = "SINGLE"
+    DOUBLE = "DOUBLE"
+    MICROSTEP = "MICRO"
+    FORWARD = "FORWARD"
+    BACKWARD = "BACKWARD"
+
+
 # Versuche Hardware-Module zu laden; bei Fehlschlag Simulation anbieten
 try:
     import board
@@ -26,12 +37,9 @@ try:
 except Exception:
     HARDWARE = False
 
-    class stepper:  # minimale Simulation der Konstanten
-        SINGLE = "SINGLE"
-        DOUBLE = "DOUBLE"
-        MICROSTEP = "MICRO"
-        FORWARD = "FORWARD"
-        BACKWARD = "BACKWARD"
+    # Hardware-Module konnten nicht importiert werden. Die globale
+    # `stepper`-Klasse oben enthält bereits minimale Konstanten, daher
+    # ist hier keine zusätzliche Definition notwendig.
 
 
 def parse_args():
@@ -107,15 +115,15 @@ def main():
         )
         sys.exit(1)
 
-    stil_map = {
+    sstyle_map = {
         "single": stepper.SINGLE,
         "double": stepper.DOUBLE,
         "micro": stepper.MICROSTEP,
     }
-    richt_map = {"forward": stepper.FORWARD, "backward": stepper.BACKWARD}
+    dir_map = {"forward": stepper.FORWARD, "backward": stepper.BACKWARD}
 
-    sstyle = stil_map[args.stepstil]
-    m_direction: str = richt_map[args.richtung]
+    sstyle = sstyle_map[args.stepstil]
+    m_direction: str = dir_map[args.richtung]
     idx = args.motorid - 1
 
     motor = None
