@@ -6,8 +6,8 @@ Beispiel:
   python motortest.py -m 1 -s SINGLE -c 100 -d 0.01 -D vor
   python motortest.py --simulieren -m 2 -s micro -c 50
 
-Das Skript ist bewusst schlank gehalten: deutsche Optionen, Standardwerte,
-und eine `--simulieren`-Option für Systeme ohne Hardware.
+
+ `--simulieren`-Option für Systeme ohne Hardware.
 """
 
 import argparse
@@ -38,10 +38,10 @@ def parse_args():
     p = argparse.ArgumentParser(description="Einfaches Stepper-Testskript (DE)")
     p.add_argument(
         "-s",
-        "--stepstil",
-        choices=["SINGLE", "doppel", "micro"],
-        default="SINGLE",
-        dest="stepstil",
+        "--stepstyle",
+        choices=["SINGLE", "double", "micro"],
+        default="DOUBLE",
+        dest="stepstyle",
         help="Schritt-Modus: einfach|doppel|micro (Standard: einfach)",
     )
     p.add_argument(
@@ -54,32 +54,32 @@ def parse_args():
         help="Motor-Id 1..4 (Standard: 1)",
     )
     p.add_argument(
-        "-c",
-        "--schritte",
+        "-sc",
+        "--stepcount",
         type=int,
         default=100,
-        dest="schritte",
+        dest="steps",
         help="Anzahl Schritte (Standard: 100)",
     )
     # Verwende -v für Verzögerung, um Konflikt mit -d zu vermeiden
     p.add_argument(
-        "-v",
-        "--verzoegerung",
+        "-d",
+        "--delay",
         type=float,
         default=0.01,
-        dest="verzoegerung",
+        dest="delay",
         help="Pause zwischen Schritten in Sekunden (Standard: 0.01)",
     )
     p.add_argument(
-        "-D",
-        "--richtung",
-        choices=["vor", "zurueck"],
-        default="vor",
-        dest="richtung",
+        "-dir",
+        "--direction",
+        choices=["forward", "backward"],
+        default="forward",
+        dest="direction",
         help="Richtung: vor|zurueck (Standard: vor)",
     )
     p.add_argument(
-        "--simulieren",
+        "--simulate",
         action="store_true",
         dest="simulieren",
         help="Ohne Hardware laufen (nur Ausgabe)",
@@ -102,20 +102,20 @@ def main():
         print("Simulation: keine Hardware-Operationen")
     elif not HARDWARE:
         print(
-            "Hardware-Module nicht verfügbar. Starte mit --simulieren, wenn nötig.",
+            "Hardware-Module nicht verfügbar. Starte mit --simulate, wenn nötig.",
             file=sys.stderr,
         )
         sys.exit(1)
 
     stil_map = {
-        "einfach": stepper.SINGLE,
-        "doppel": stepper.DOUBLE,
+        "single": stepper.SINGLE,
+        "double": stepper.DOUBLE,
         "micro": stepper.MICROSTEP,
     }
-    richt_map = {"vor": stepper.FORWARD, "zurueck": stepper.BACKWARD}
+    richt_map = {"forward": stepper.FORWARD, "backward": stepper.BACKWARD}
 
-    stil = stil_map[args.stepstil]
-    richt = richt_map[args.richtung]
+    sstyle = stil_map[args.stepstil]
+    m_direction: str = richt_map[args.richtung]
     idx = args.motorid - 1
 
     motor = None
@@ -143,7 +143,9 @@ def main():
                 if args.schritte >= 10 and (i % (max(1, args.schritte // 10)) == 0):
                     print(f"Simulierter Schritt {i+1}/{args.schritte}")
             else:
-                motor.onestep(direction=richt, style=stil)
+                motor.onestep(
+                    direction=m_direction, style=sstyle
+                )  # >>>>> Wenn hier was steht von wegen onestep is not defined dann kann man das meistens ignorieren
             time.sleep(args.verzoegerung)
     except KeyboardInterrupt:
         print("\nAbgebrochen vom Benutzer")
